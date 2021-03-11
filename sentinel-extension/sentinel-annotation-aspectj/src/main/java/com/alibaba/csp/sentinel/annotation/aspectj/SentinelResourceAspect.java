@@ -24,7 +24,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 /**
@@ -48,12 +51,19 @@ public class SentinelResourceAspect extends AbstractSentinelAspectSupport {
             // Should not go through here.
             throw new IllegalStateException("Wrong state for SentinelResource annotation");
         }
+        String url=null;
+        if(null!=RequestContextHolder.getRequestAttributes()){
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            url=request.getRequestURI().replace(request.getContextPath(),"");
+
+        }
         String resourceName = getResourceName(annotation.value(), originMethod);
         EntryType entryType = annotation.entryType();
         int resourceType = annotation.resourceType();
         Entry entry = null;
         try {
-            entry = SphU.entry(resourceName, resourceType, entryType, pjp.getArgs());
+            entry = SphU.entry(resourceName, url,resourceType, entryType, pjp.getArgs());
+//            entry = SphU.entry(resourceName, resourceType, entryType, pjp.getArgs());
             Object result = pjp.proceed();
             return result;
         } catch (BlockException ex) {

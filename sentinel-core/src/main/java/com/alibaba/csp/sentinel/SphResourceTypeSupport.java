@@ -36,6 +36,8 @@ public interface SphResourceTypeSupport {
      */
     Entry entryWithType(String name, int resourceType, EntryType entryType, int count, Object[] args)
         throws BlockException;
+    Entry entryWithType(String name, String url,int resourceType, EntryType entryType, int count, Object[] args)
+            throws BlockException;
 
     /**
      * Create a protected resource with provided classification.
@@ -50,6 +52,8 @@ public interface SphResourceTypeSupport {
      * @throws BlockException if the block criteria is met
      */
     Entry entryWithType(String name, int resourceType, EntryType entryType, int count, boolean prioritized,
+                        Object[] args) throws BlockException;
+    Entry entryWithType(String name, String url,int resourceType, EntryType entryType, int count, boolean prioritized,
                         Object[] args) throws BlockException;
 
     /**

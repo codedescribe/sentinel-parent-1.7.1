@@ -339,14 +339,23 @@ public class CtSph implements Sph {
         throws BlockException {
         return entryWithType(name, resourceType, entryType, count, false, args);
     }
-
+    @Override
+    public Entry entryWithType(String name, String url,int resourceType, EntryType entryType, int count, Object[] args)
+            throws BlockException {
+        return entryWithType(name, url,resourceType, entryType, count, false, args);
+    }
     @Override
     public Entry entryWithType(String name, int resourceType, EntryType entryType, int count, boolean prioritized,
                                Object[] args) throws BlockException {
         StringResourceWrapper resource = new StringResourceWrapper(name, entryType, resourceType);
         return entryWithPriority(resource, count, prioritized, args);
     }
-
+    @Override
+    public Entry entryWithType(String name,String url, int resourceType, EntryType entryType, int count, boolean prioritized,
+                               Object[] args) throws BlockException {
+        StringResourceWrapper resource = new StringResourceWrapper(name,url, entryType, resourceType);
+        return entryWithPriority(resource, count, prioritized, args);
+    }
     @Override
     public AsyncEntry asyncEntryWithType(String name, int resourceType, EntryType entryType, int count,
                                          boolean prioritized, Object[] args) throws BlockException {

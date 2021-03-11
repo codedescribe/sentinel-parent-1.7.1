@@ -117,10 +117,13 @@ public class Context {
         return this;
     }
 
+    public Context setUrlNode(Node node) {
+        this.curEntry.setUrlNode(node);
+        return this;
+    }
     public Entry getCurEntry() {
         return curEntry;
     }
-
     public Context setCurEntry(Entry curEntry) {
         this.curEntry = curEntry;
         return this;

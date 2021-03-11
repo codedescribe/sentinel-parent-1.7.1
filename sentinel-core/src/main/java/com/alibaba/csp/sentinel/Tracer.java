@@ -22,6 +22,7 @@ import com.alibaba.csp.sentinel.node.ClusterNode;
 import com.alibaba.csp.sentinel.node.DefaultNode;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.metric.extension.MetricExtension;
+import com.alibaba.csp.sentinel.slots.clusterbuilder.ClusterBuilderSlot;
 import com.alibaba.csp.sentinel.util.AssertUtil;
 
 /**
@@ -81,6 +82,7 @@ public class Tracer {
             return;
         }
 
+        //还要获取context中url
         DefaultNode curNode = (DefaultNode)context.getCurNode();
         traceExceptionToNode(e, count, context.getCurEntry(), curNode);
     }
@@ -118,11 +120,26 @@ public class Tracer {
         if (curNode == null) {
             return;
         }
+        boolean urlFlag=false;
+        if(null!=entry.getResourceWrapper().getUrl()){
+            urlFlag=true;
+        }
         for (MetricExtension m : MetricExtensionProvider.getMetricExtensions()) {
             m.addException(entry.getResourceWrapper().getName(), count, t);
+            if(urlFlag){
+                m.addException(entry.getResourceWrapper().getUrl(), count, t);
+            }
         }
 
         // clusterNode can be null when Constants.ON is false.
+        if(urlFlag){
+            ClusterNode clusterNode2 = ClusterBuilderSlot.getClusterNode(entry.getResourceWrapper().getUrl());
+            if (clusterNode2 != null) {
+                clusterNode2.trace(t, count);
+            }
+
+        }
+
         ClusterNode clusterNode = curNode.getClusterNode();
         if (clusterNode == null) {
             return;

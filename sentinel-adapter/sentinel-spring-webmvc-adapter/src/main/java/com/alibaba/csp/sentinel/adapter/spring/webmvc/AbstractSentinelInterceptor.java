@@ -54,14 +54,16 @@ public abstract class AbstractSentinelInterceptor implements HandlerInterceptor 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
         throws Exception {
         try {
-            String resourceName = getResourceName(request);
-
-            if (StringUtil.isNotEmpty(resourceName)) {
+//            String resourceName = getResourceName(request);
+//            request.getRequestURI();
+            String url=request.getRequestURI().replace(request.getContextPath(),"");
+            if (StringUtil.isNotEmpty(url)) {
                 // Parse the request origin using registered origin parser.
                 String origin = parseOrigin(request);
+//                String url=request
                 ContextUtil.enter(SENTINEL_SPRING_WEB_CONTEXT_NAME, origin);
-                Entry entry = SphU.entry(resourceName, ResourceTypeConstants.COMMON_WEB, EntryType.IN);
-
+//                Entry entry = SphU.entry(resourceName, ResourceTypeConstants.COMMON_WEB, EntryType.IN);
+                Entry entry = SphU.entry(url, ResourceTypeConstants.COMMON_WEB, EntryType.IN);
                 setEntryInRequest(request, baseWebMvcConfig.getRequestAttributeName(), entry);
             }
             return true;

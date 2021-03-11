@@ -76,6 +76,7 @@
         <module>sentinel-demo</module>
         <module>sentinel-benchmark</module>
         <module>sentinel-cluster</module>
+        <module>testurl</module>
     </modules>
 
     <dependencyManagement>

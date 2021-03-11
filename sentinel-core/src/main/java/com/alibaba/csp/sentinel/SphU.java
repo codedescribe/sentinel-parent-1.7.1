@@ -301,7 +301,10 @@ public class SphU {
         throws BlockException {
         return Env.sph.entryWithType(name, resourceType, type, 1, args);
     }
-
+    public static Entry entry(String name,String url, int resourceType, EntryType type, Object[] args)
+            throws BlockException {
+        return Env.sph.entryWithType(name,url, resourceType, type, 1, args);
+    }
     /**
      * Record statistics and check all rules of the resource.
      *
